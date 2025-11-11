@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Chatbot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="/static/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- Chat Card -->
+    <div class="chat-wrapper">
+
+      <!-- Header -->
+      <header class="chat-header">
+        <h2>AI Chatbot</h2>
+        <p>Talk | Learn | Explore</p>
+      </header>
+
+      <!-- Chat Body -->
+      <main id="chatWindow" class="chat-window"></main>
+
+      <!-- Input -->
+      <div class="input-area">
+        <input 
+          type="text" 
+          id="userInput" 
+          placeholder="Type your message..."
+          autocomplete="off"
+        />
+        <button id="sendBtn" class="send-btn">Send</button>
+      </div>
+
+      <!-- Footer Buttons -->
+      <div class="btn-container">
+        <button id="summaryBtn" class="btn secondary">Summarize</button>
+        <button id="resetBtn" class="btn danger">Reset</button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- JS -->
+  <script>
+    const chat = document.getElementById("chatWindow");
+    const input = document.getElementById("userInput");
+
+    function addMessage(role, text) {
+      const msg = document.createElement("div");
+      msg.className = `msg ${role}`;
+      
+      const icon = role === "user" ? "👤" : (role === "summary" ? "📄" : "🤖");
+
+      msg.innerHTML = `
+        <div class="avatar">${icon}</div>
+        <div class="bubble">${text}</div>
+      `;
+
+      chat.appendChild(msg);
+      chat.scrollTop = chat.scrollHeight;
+    }
+
+    async function sendMessage() {
+      const text = input.value.trim();
+      if (!text) return;
+
+      addMessage("user", text);
+      input.value = "";
+
+      const typing = document.createElement("div");
+      typing.className = "msg typing";
+      typing.innerHTML = `
+        <div class="avatar">🤖</div>
+        <div class="bubble dots"><span></span><span></span><span></span></div>
+      `;
+      chat.appendChild(typing);
+
+      try {
+        const res = await fetch("/chat", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ message: text }),
+        });
+        const data = await res.json();
+        typing.remove();
+        addMessage("bot", data.response);
+      } catch {
+        typing.remove();
+        addMessage("bot", "⚠️ Error: Could not process message.");
+      }
+    }
+
+    document.getElementById("sendBtn").onclick = sendMessage;
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") sendMessage();
+    });
+
+    document.getElementById("summaryBtn").onclick = async () => {
+      const res = await fetch("/summarize");
+      const data = await res.json();
+      addMessage("summary", data.summary);
+    };
+
+    document.getElementById("resetBtn").onclick = async () => {
+      await fetch("/reset", { method: "POST" });
+      chat.innerHTML = "";
+      addMessage("bot", "✅ Conversation cleared.");
+    };
+  </script>
+</body>
+</html>

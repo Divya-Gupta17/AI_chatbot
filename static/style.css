@@ -1,0 +1,246 @@
+:root {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+
+  /* Pastel Palette */
+  --primary: #7a9cff;
+  --primary-dark: #5e7fe6;
+
+  --secondary: #8ee4d8;
+  --secondary-dark: #67cbbb;
+
+  --danger: #ff8b94;
+  --danger-dark: #ff6b75;
+
+  --user: #dce7ff;
+  --bot: #ddf5e5;
+  --summary: #fff4c7;
+
+  --text: #232323;
+  --radius: 18px;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+/* Chat Card */
+.chat-wrapper {
+  width: 60vw;
+  min-width: 450px;
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #dde2ef;
+}
+
+/* Header */
+.chat-header {
+  text-align: center;
+  padding: 22px;
+  background: var(--primary);
+  background: linear-gradient(135deg, #8baaff, #7dc5ff);
+  color: white;
+}
+.chat-header h2 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+.chat-header p {
+  margin: 6px 0 0;
+  font-size: 15px;
+  opacity: 0.9;
+}
+
+/* Chat Window */
+.chat-window {
+  height: 66vh;
+  overflow-y: auto;
+  padding: 22px;
+  background: #fafbff;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Message Row */
+.msg {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  animation: fadeIn 0.15s ease-in-out;
+}
+
+/* Avatars */
+.avatar {
+  font-size: 22px;
+}
+
+/* Message Bubbles */
+.bubble {
+  max-width: 70%;
+  padding: 16px 20px;
+  border-radius: var(--radius);
+  border: 1px solid #ced3e6;
+  font-size: 18px;
+  line-height: 1.6;
+  color: var(--text);
+  background: white;
+}
+
+/* USER */
+.msg.user {
+  justify-content: flex-end;
+}
+.msg.user .avatar {
+  display: none;
+}
+.msg.user .bubble {
+  background: var(--user);
+  border-color: #c8d9ff;
+}
+
+/* BOT */
+.msg.bot .bubble {
+  background: var(--bot);
+  border-color: #bfeecf;
+}
+
+/* SUMMARY */
+.msg.summary .bubble {
+  background: var(--summary);
+  border-color: #f4d87c;
+}
+
+/* Typing Dots */
+.dots {
+  display: flex;
+  gap: 5px;
+}
+.dots span {
+  width: 6px;
+  height: 6px;
+  background: #aaa;
+  border-radius: 50%;
+  animation: blink 1.4s infinite;
+}
+.dots span:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.dots span:nth-child(3) {
+  animation-delay: 0.3s;
+}
+
+@keyframes blink {
+  0% { opacity: 0.25; }
+  50% { opacity: 1; }
+  100% { opacity: 0.25; }
+}
+
+/* Input Area */
+.input-area {
+  display: flex;
+  gap: 12px;
+  padding: 16px;
+  background: #eef3ff;
+}
+.input-area input {
+  flex: 1;
+  padding: 16px 18px;
+  border-radius: var(--radius);
+  border: 1px solid #cad5f6;
+  background: #ffffff;
+  font-size: 18px;
+  outline: none;
+}
+.input-area input::placeholder {
+  color: #9aa3c3;
+  font-weight: 400;
+}
+
+.send-btn {
+  padding: 16px 24px;
+  border-radius: var(--radius);
+  border: none;
+  background: var(--primary);
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
+.send-btn:hover {
+  background: var(--primary-dark);
+}
+
+/* Footer Buttons */
+.btn-container {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  padding: 12px;
+  background: #ffffff;
+  border-top: 1px solid #e1e1e1;
+}
+
+.btn {
+  padding: 12px 22px;
+  border-radius: var(--radius);
+  border: none;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secondary {
+  background: var(--secondary);
+}
+.secondary:hover {
+  background: var(--secondary-dark);
+}
+
+.danger {
+  background: var(--danger);
+  color: white;
+}
+.danger:hover {
+  background: var(--danger-dark);
+}
+
+/* Scroll */
+.chat-window::-webkit-scrollbar {
+  width: 8px;
+}
+.chat-window::-webkit-scrollbar-thumb {
+  background: #c2c9e0;
+  border-radius: 10px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+  .chat-wrapper {
+    width: 90vw;
+    min-width: 300px;
+  }
+  .chat-header h2 {
+    font-size: 24px;
+  }
+}
